@@ -1,0 +1,47 @@
+{
+  "name": "adarsh-vidya-mandir",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "shared",
+    "admin-web",
+    "mobile-app"
+  ],
+  "scripts": {
+    "dev:admin": "npm run dev --prefix admin-web",
+    "dev:mobile": "npm run dev --prefix mobile-app",
+    "build:admin": "npm run build --prefix admin-web",
+    "build:mobile": "npm run build --prefix mobile-app",
+    "build:android": "npm run build:android --prefix mobile-app",
+    "cap:sync": "npm run cap:sync --prefix mobile-app",
+    "cap:open": "npm run cap:open --prefix mobile-app",
+    "android:phone": "npm run android:phone --prefix mobile-app"
+  },
+  "dependencies": {
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/camera": "^8.2.4",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/local-notifications": "^8.3.1",
+    "@capacitor/preferences": "^8.0.1",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "firebase": "^12.19.0",
+    "lucide-react": "^1.48.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/cli": "^8.5.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0"
+  }
+}

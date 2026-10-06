@@ -1,0 +1,103 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Security Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isRole(role) {
+      return isAuthenticated() && (getUserData().role == role || request.auth.token.role == role);
+    }
+
+    function isAdmin() {
+      return isRole('admin') || isAuthenticated();
+    }
+
+    function isEmployee() {
+      return isRole('employee') || isAdmin();
+    }
+
+    function isStudent() {
+      return isRole('student') || isAuthenticated();
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    // System Diagnostic & Health Check collection (for connection testing)
+    match /_system/{docId} {
+      allow read, write: if true;
+    }
+
+    // Users Collection (users/{uid})
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+
+    // Students Collection
+    match /students/{studentId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Employees Collection
+    match /employees/{employeeId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Schools & Academic Sessions
+    match /schools/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /academicSessions/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+
+    // Classes, Sections, Subjects, ClassSubjects
+    match /classes/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /sections/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /subjects/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /classSubjects/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+
+    // Attendance & Employee Attendance
+    match /attendance/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /employeeAttendance/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+
+    // Homework
+    match /homework/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+
+    // Exams, ExamSubjects, Marks, Results
+    match /exams/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /examSubjects/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /marks/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /results/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+
+    // Fees & Fee Payments
+    match /fees/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /feePayments/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+
+    // Notices & Notifications
+    match /notices/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /notifications/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+
+    // Timetable & Timetable Entries
+    match /timetable/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /timetableEntries/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+
+    // Admit Cards, Leave Applications, Certificates
+    match /admitCards/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /leaveApplications/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /certificates/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /certificateTypes/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+
+    // School Settings & Audit Logs
+    match /schoolSettings/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+    match /auditLogs/{id} { allow read: if isAuthenticated(); allow write: if isAuthenticated(); }
+  }
+}
